@@ -1,32 +1,68 @@
-<div class="container">
+<div class="container mt-2">
   <h2 style="text-align: center;">Form to Update an Address</h2>
   <form [formGroup]="form">
-    <mat-form-field appearance="fill">
-      <mat-label>Please Enter the Country Name</mat-label>
-      <mat-select formControlName="country" (selectionChange)="onChangeCountry($event.value)">
-        <mat-option *ngFor="let country of firstLevelArr" [value]="country">{{ country.name }}</mat-option>
+    <mat-form-field>
+      <mat-label>Select Country</mat-label>
+      <mat-select formControlName="country">
+        <mat-option *ngFor="let country of countries" [value]="country">{{ country['countryName'] }}</mat-option>
       </mat-select>
     </mat-form-field>
-
-    <mat-form-field appearance="fill" *ngIf="form.get('country')?.value">
-      <mat-label>Please Enter the State Name</mat-label>
-      <mat-select formControlName="state" (selectionChange)="onChangeState($event.value)">
-        <mat-option *ngFor="let state of States" [value]="state">{{ state.name }}</mat-option>
+  
+    <mat-form-field *ngIf="form.get('country')?.value">
+      <mat-label>Select State</mat-label>
+      <mat-select formControlName="state">
+        <mat-option *ngFor="let state of getchildOptions('country', 'states')" [value]="state">{{ state.stateName }}</mat-option>
       </mat-select>
     </mat-form-field>
-
-    <mat-form-field appearance="fill" *ngIf="form.get('state')?.value">
-      <mat-label>Please Enter the District Name</mat-label>
-      <mat-select formControlName="district" (selectionChange)="onChangeDistrict($event.value)">
-        <mat-option *ngFor="let district of districts" [value]="district">{{ district.name }}</mat-option>
+  
+    <mat-form-field *ngIf="form.get('country')?.value && form.get('state')?.value">
+      <mat-label>Select District</mat-label>
+      <mat-select formControlName="district">
+        <mat-option *ngFor="let district of getchildOptions('state', 'districts')" [value]="district">{{ district.districtName }}</mat-option>
       </mat-select>
     </mat-form-field>
-
-    <mat-form-field appearance="fill" *ngIf="form.get('district')?.value">
-      <mat-label>Please Enter the Place Name</mat-label>
+  
+    <mat-form-field *ngIf="form.get('country')?.value && form.get('state')?.value && form.get('district')?.value">
+      <mat-label>Select Place</mat-label>
       <mat-select formControlName="place">
-        <mat-option *ngFor="let place of places" [value]="place">{{ place.name }}</mat-option>
+        <mat-option *ngFor="let place of getchildOptions('district', 'places')" [value]="place">{{ place.placeName }}</mat-option>
       </mat-select>
     </mat-form-field>
   </form>
+  
+</div>
+<hr>
+<hr>
+<div class="container mt-2">
+  <h2 style="text-align: center;">Preformatted Form to Update an Address</h2>
+  <form [formGroup]="preformatForm">
+    <mat-form-field>
+      <mat-label>Select Country</mat-label>
+      <mat-select formControlName="country">
+        <mat-option *ngFor="let country of countries" [value]="country">{{ country['countryName'] }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field  *ngIf="preformatForm.get('country')?.value">
+      <mat-label>Select State</mat-label>
+      <mat-select formControlName="state" >
+        <mat-option *ngFor="let state of preformatForm.get('country')?.value.states" [value]="state">{{ state.stateName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field  *ngIf="preformatForm.get('country')?.value && preformatForm.get('state')?.value">
+      <mat-label>Select District</mat-label>
+      <mat-select formControlName="district">
+        <mat-option *ngFor="let district of preformatForm.get('state')?.value.districts" [value]="district">{{ district.districtName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field *ngIf="preformatForm.get('country')?.value && preformatForm.get('state')?.value && preformatForm.get('district')?.value">
+      <mat-label>Select Place</mat-label>
+      <mat-select formControlName="place">
+        <mat-option *ngFor="let place of preformatForm.get('district')?.value.places" [value]="place">{{ place.placeName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  
 </div>
